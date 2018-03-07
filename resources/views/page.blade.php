@@ -12,10 +12,20 @@
 @section('content')
     <h2> {{$name}}</h2>
     <p>This is my body content.</p>
+
+    <h2>If statement</h2>
     @if( $day == 'friday')
         <p>Time to party</p>
     @else
-        <p>Time to make money</p>
+        <p>Time to make money $$$</p>
     @endif
-@endsection
 
+    <h2> Foreach Loop</h2>
+    @foreach( $drinks as $drink)
+    {{$drink}} <br>
+    @endforeach
+
+    <h2> Execute PHP Function</h2>
+    <p> The date is {{date(' D M, Y')}}</p>
+
+@endsection

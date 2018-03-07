@@ -13,8 +13,8 @@
 Route::get('/','Front@index');
 Route::get('/products','Front@products');
 Route::get('/products/details/{id}','Front@product_details');
-Route::get('/products/categories','Front@product_categories');
-Route::get('/products/brands','Front@product_brands');
+Route::get('/products/categories/{name}','Front@product_categories');
+Route::get('/products/brands/{name}/{category?}','Front@product_brands');
 Route::get('/blog','Front@blog');
 Route::get('/blog/post/{id}','Front@blog_post');
 Route::get('/contact-us','Front@contact_us');
@@ -24,8 +24,10 @@ Route::get('/cart','Front@cart');
 Route::get('/checkout','Front@checkout');
 Route::get('/search/{query}','Front@search');
 
-Route::get('blade', function(){
-    $drinks = array('Vodka', 'Gin', 'Brandy', 'Juice');
-    return view('page', array('name' => 'The Raven', 'day' => 'Wednesday', 'drinks' => $drinks));
+Route::get('blade', function () {
+    $drinks = array('Vodka','Gin','Brandy');
+    return view('page',array('name' => 'The Raven','day' => 'Friday','drinks' => $drinks));
 });
+
+
 

@@ -29,3 +29,45 @@ Route::get('blade', function(){
     return view('page', array('name' => 'The Raven', 'day' => 'Wednesday', 'drinks' => $drinks));
 });
 
+
+// INSERT
+Route::get('/insert', function (){
+   App\Category::create(array('name' => 'Music'));
+   return 'category added';
+});
+
+// READ
+Route::get('/read', function (){
+   $category = new App\Category();
+   $data = $category->all(array('name', 'id'));
+
+    foreach ($data as $list) {
+        echo $list->id . ' ' . $list->name . ' ';
+   }
+});
+
+// UPDATE
+Route::get('/update', function (){
+    $category = App\Category::find(6); // 16 - primary key param
+    $category->name = 'HEAVY METAL';
+    $category->save();
+
+    $data = $category->all(array('name', 'id'));
+
+    foreach ($data as $list){
+        echo $list->id . ' ' . $list->name . ' ';
+    }
+});
+
+// DELETE
+Route::get('/delete', function (){
+   $category = App\Category::find(5);
+   $category->delete();
+
+   $data = $category->all(array('name', 'id'));
+
+   foreach ($data as $list) {
+       echo $list->id . " " . $list->name . " ";
+   }
+});
+

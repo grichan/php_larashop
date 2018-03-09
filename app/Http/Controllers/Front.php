@@ -1,61 +1,75 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Brand;
+use App\Category;
+use App\Product;
 use App\Http\Controllers\Controller;
 
 class Front extends Controller {
 
-    public function index() {
-        return 'index page';
+    var $brands;
+    var $categories;
+    var $products;
+    var $title;
+    var $description;
+
+
+    public function __construct()
+    {
+        $this->brands = Brand::all(array('name'));
+        $this->categories = Category::all(array('name'));
+        $this->products = Product::all(array('id', 'name', 'price'));
     }
 
-    public function products() {
-        return 'products page';
+    public function index(){
+        return view('products', array('title' => 'Welcome', 'description' => '', 'page' => 'home', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
     }
 
-    public function product_details($id) {
-        return 'product details page';
+    public function products(){
+        return view('products', array('page' => 'products'));
     }
 
-    public function product_categories() {
-        return 'product categories page';
+    public function product_details($id){
+        return view('products', array('page' => 'products'));
     }
 
-    public function product_brands() {
-        return 'product brands page';
+    public function product_categories($name) {
+        return view('products', array('page' => 'products'));
     }
 
-    public function blog() {
-        return 'blog page';
+    public function product_brands($name, $category = null){
+        return view('products', array('page' => 'products'));
+    }
+
+    public function  blog() {
+        return view('blog', array('page' => 'blog'));
     }
 
     public function blog_post($id) {
-        return 'blog post page';
+        return view('blog_post', array('page' => 'blog'));
     }
 
-    public function contact_us() {
-        return 'contact us page';
+    public function contact_us(){
+        return view('contact_us', array('page' => 'contact_us'));
     }
 
     public function login() {
-        return 'login page';
-    }
-
-    public function logout() {
-        return 'logout page';
+        return view('cart', array('page' => 'home'));
     }
 
     public function cart() {
-        return 'cart page';
+        return view('cart', array('page' => 'home'));
     }
 
-    public function checkout() {
-        return 'checkout page';
+    public function checkout(){
+        return view('checkout', array('page' => 'home'));
     }
 
-    public function search($query) {
-        return "$query search page";
+    public function search(){
+        return view('checkout', array('page' => 'products'));
     }
+
 }

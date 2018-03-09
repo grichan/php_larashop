@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="left-sidebar">
-                    @include('shared.sidebar')
+                    @include('resources.views.shared.sidebar')
                 </div>
             </div>
             <div class="col-sm-9">

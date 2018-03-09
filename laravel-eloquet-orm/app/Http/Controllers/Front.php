@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use App\Brand;
@@ -36,11 +35,8 @@ class Front extends Controller {
     }
 
     public function product_categories($name) {
-        return view('product_categories',
-            array('title' => 'Welcome to Categories','name' =>$name ,'description' => 'Our products that we sell','page' => 'products', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
+        return view('products', array('title' => 'Welcome','description' => '','page' => 'products', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
     }
-
-
 
     public function product_brands($name, $category = null) {
         return view('products', array('title' => 'Welcome','description' => '','page' => 'products', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
@@ -77,5 +73,4 @@ class Front extends Controller {
     public function search($query) {
         return view('products', array('title' => 'Welcome','description' => '','page' => 'products'));
     }
-
 }

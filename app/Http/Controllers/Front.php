@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Cart;
 use App\User;
 use Illuminate\Support\Facades\Auth;
-
+use App\Post;
 
 class Front extends Controller {
 
@@ -31,37 +31,109 @@ class Front extends Controller {
     }
 
     public function index() {
-        return view('home', array('title' => 'Welcome','description' => '','page' => 'home', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
+        return view('home', array(
+            'title' => 'Welcome',
+            'description' => '',
+            'page' => 'home',
+            'brands' => $this->brands,
+            'categories' => $this->categories,
+            'products' => $this->products));
     }
 
     public function products() {
-        return view('products', array('title' => 'Products Listing','description' => '','page' => 'products', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
+        return view('products', array(
+            'title' => 'Products Listing',
+            'description' => '',
+            'page' => 'products',
+            'brands' => $this->brands,
+            'categories' => $this->categories,
+            'products' => $this->products));
     }
 
     public function product_details($id) {
         $product = Product::find($id);
-        return view('product_details', array('product' => $product, 'title' => $product->name,'description' => '','page' => 'products', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
+        return view('product_details', array(
+            'product' => $product,
+            'title' => $product->name,
+            'description' => '',
+            'page' => 'products',
+            'brands' => $this->brands,
+            'categories' => $this->categories,
+            'products' => $this->products));
     }
 
     public function product_categories($name) {
         $drinks = array('Vodka', 'Gin', 'Brandy', 'Juice');
-        return view('product_categories', array('drinks' => $drinks, 'title' => 'Welcome to Categories','name' =>$name ,'description' => 'Our products that we sell','page' => 'products', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
+        return view('product_categories', array(
+            'drinks' => $drinks,
+            'title' => 'Welcome to Categories',
+            'name' =>$name ,
+            'description' => 'Our products that we sell',
+            'page' => 'products',
+            'brands' => $this->brands,
+            'categories' => $this->categories,
+            'products' => $this->products));
     }
 
     public function product_brands($name, $category = null) {
-        return view('products', array('title' => 'Welcome','description' => '','page' => 'products', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
+        return view('products', array(
+            'title' => 'Welcome',
+            'description' => '',
+            'page' => 'products',
+            'brands' => $this->brands,
+            'categories' => $this->categories,
+            'products' => $this->products));
     }
 
+    // BLOG FUNCTIONS
     public function blog() {
-        return view('blog', array('title' => 'Welcome','description' => '','page' => 'blog', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
-    }
+        $posts = Post::where('id', '>', 0)->paginate(3);
+        $posts->setPath('blog');
 
-    public function blog_post($id) {
-        return view('blog_post', array('title' => 'Welcome','description' => '','page' => 'blog', 'brands' => $this->brands, 'categories' => $this->categories, 'products' => $this->products));
+        $data['posts'] = $posts;
+
+        return view('blog', array(
+            'data' => $data,
+            'title' => 'Latest Blog Posts',
+            'description' => '',
+            'page' => 'blog',
+            'brands' => $this->brands,
+            'categories' => $this->categories,
+            'products' => $this->products));
+    }
+    public function blog_post($url) {
+        $post = Post::whereUrl($url)->first();
+
+        $tags = $post->tags;
+        $prev_url = Post::prevBlogPostUrl($post->id);
+        $next_url = Post::nextBlogPostUrl($post->id);
+        $title = $post->title;
+        $description = $post->description;
+        $page = 'blog';
+        $brands = $this->products;
+        $categories = $this->categories;
+        $products = $this->products;
+
+        $data = compact(
+            'prev_url',
+            'next_url',
+            'tags',
+            'post',
+            'title',
+            'description',
+            'page',
+            'brands',
+            'categories',
+            'products');
+
+         return view('blog_post', $data);
     }
 
     public function contact_us() {
-        return view('contact_us', array('title' => 'Welcome','description' => '','page' => 'contact_us'));
+        return view('contact_us', array(
+            'title' => 'Welcome',
+            'description' => '',
+            'page' => 'contact_us'));
     }
 
     // CART ACTIONS
@@ -70,7 +142,11 @@ class Front extends Controller {
          if (Request::isMethod('post')) {
             $product_id = Request::get('product_id');
             $product = Product::find($product_id);
-            Cart::add(array('id' => $product_id, 'name' => $product->name, 'qty' => 1, 'price' => $product->price));
+            Cart::add(array(
+                'id' => $product_id,
+                'name' => $product->name,
+                'qty' => 1,
+                'price' => $product->price));
         }
         // increment the quantity of cart
         if (Request::get('product_id') && (Request::get('increment')) == 1 ){
@@ -98,15 +174,25 @@ class Front extends Controller {
         }
         $cart = Cart::content();
 
-        return view('cart', array('cart' => $cart, 'title' => 'Welcome', 'description' => '', 'page' => 'home'));
+        return view('cart', array(
+            'cart' => $cart,
+            'title' => 'Welcome',
+            'description' => '',
+            'page' => 'home'));
     }
 
     public function checkout() {
-        return view('checkout', array('title' => 'Welcome','description' => '','page' => 'home'));
+        return view('checkout', array(
+            'title' => 'Welcome',
+            'description' => '',
+            'page' => 'home'));
     }
 
     public function search($query) {
-        return view('products', array('title' => 'Welcome','description' => '','page' => 'products'));
+        return view('products', array(
+            'title' => 'Welcome',
+            'description' => '',
+            'page' => 'products'));
     }
 
     // REGISTER USER
@@ -123,10 +209,12 @@ class Front extends Controller {
 
     // LOGIN USER
     public function authenticate(){
-        if ( Auth::attempt( ['email' => Request::get('email'), 'password' => Request::get('password')] ) ){
+        if ( Auth::attempt( [
+            'email' => Request::get('email'), 'password' => Request::get('password')] ) ){
             return redirect()->intended('checkout');
         } else {
-            return view('login', array( 'title' => 'Welcome', 'description' => '', 'page' => 'home' ) );
+            return view('login', array(
+                'title' => 'Welcome', 'description' => '', 'page' => 'home' ) );
         }
     }
 
